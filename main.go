@@ -6,6 +6,7 @@ import (
 	"github.com/asim/go-micro/plugins/registry/consul/v3"
 	"github.com/asim/go-micro/v3"
 	"github.com/asim/go-micro/v3/registry"
+	"github.com/asim/go-micro/v3/server"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/sirupsen/logrus"
@@ -105,8 +106,12 @@ func main() {
 
 	//create service
 	service := micro.NewService(
+		micro.Server(server.NewServer(func(options *server.Options) {
+			options.Advertise = "192.168.31.50:8081"
+		})),
 		micro.Name("go.micro.service.pod"),
 		micro.Version("latest"),
+		micro.Address(":8081"),
 		micro.Registry(consul),
 	)
 
